@@ -9,14 +9,15 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-# Caminho do arquivo de configuração
-CONFIG_FILE_PATH = "../config.json"
+# Caminho do arquivo de configuração (na raiz do projeto, um nível acima desta pasta)
+CONFIG_FILE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "config.json")
 
 # Carrega as configurações do arquivo JSON
 try:
     with open(CONFIG_FILE_PATH, 'r') as config_file:
         config = json.load(config_file)
-        BASE_PATH = config.get("BASE_PATH", "")
+        # BASE_PATH relativo é resolvido a partir da pasta do config.json
+        BASE_PATH = os.path.join(os.path.dirname(CONFIG_FILE_PATH), config.get("BASE_PATH", ""))
         DATA_FILE_PATH = os.path.join(BASE_PATH, config.get("DATA_FILE_PATH", ""))
         POWERBI_SCRIPT_PATH = os.path.join(BASE_PATH, config.get("POWERBI_SCRIPT_PATH", ""))
 except FileNotFoundError:

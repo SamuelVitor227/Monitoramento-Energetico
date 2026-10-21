@@ -15,6 +15,10 @@ if (Test-Path $configFilePath) {
 
 # Atribua as variáveis a partir do arquivo JSON
 $basePath = $config.BASE_PATH
+# BASE_PATH relativo é resolvido a partir da pasta do script
+if (-not [System.IO.Path]::IsPathRooted($basePath)) {
+    $basePath = Join-Path -Path (Split-Path -Parent $MyInvocation.MyCommand.Path) -ChildPath $basePath
+}
 $dadosExcelPath = Join-Path -Path $basePath -ChildPath $config.dadosExcelPath
 $pbixFilePath = Join-Path -Path $basePath -ChildPath $config.pbixFilePath
 $powerBIPath = $config.powerBIPath
